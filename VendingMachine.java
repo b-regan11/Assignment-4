@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class VendingMachine {
     private Snack selectedSnack;
+    private int totalAmount;
 
     public void welcome() {
         System.out.println("Welcome to the Snack Vending Machine!");
@@ -41,6 +42,32 @@ public class VendingMachine {
         }
     }
 
+    public void insertMoney() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please insert money into the machine. ($1 bills only)");
+        int amount = scanner.nextInt();
+        totalAmount = amount;
+
+        if (amount >= selectedSnack.getCost()) {
+            System.out.println("$" + amount + " inserted. Total: $" + selectedSnack.getCost());
+            performTransaction();
+        } else {
+            System.out.println("Invalid amount. Please insert $1 bills only.");
+            System.exit(0);
+        }
+        scanner.close();
+        }
+
+        public void performTransaction() {
+            if (totalAmount >= selectedSnack.getCost()) {
+                int change = totalAmount - selectedSnack.getCost();
+                System.out.println("Transaction completed. Enjoy your snack!");
+                System.out.println("Change: $"+ change);
+            } else {
+                System.out.println("Insufficient funds. Please insert more money");
+            }
+    }
+
 
     public static void main(String[] args) {
         VendingMachine vendingMachine = new VendingMachine();
@@ -51,6 +78,8 @@ public class VendingMachine {
         char snackChoice = scanner.nextLine().toLowerCase().charAt(0);
 
         vendingMachine.selectSnack(snackChoice);
+
+        vendingMachine.insertMoney();
 
         scanner.close();
     }
