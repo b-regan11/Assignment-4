@@ -42,30 +42,63 @@ public class VendingMachine {
         }
     }
 
-    public void insertMoney() {
+    public void insertMoney() {        
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please insert money into the machine. ($1 bills only)");
         int amount = scanner.nextInt();
         totalAmount = amount;
+        //totalAmount = selectedSnack.getCost();
 
         if (amount >= selectedSnack.getCost()) {
             System.out.println("$" + amount + " inserted. Total: $" + selectedSnack.getCost());
-            performTransaction();
+            Scanner scanner2 = new Scanner(System.in);
+            System.out.println("Do you want to confirm the transaction? yes (y) / no (n): ");
+            char snackChoice = scanner2.nextLine().toLowerCase().charAt(0);
+            confirmTransaction(snackChoice);
         } else {
             System.out.println("Invalid amount. Please insert $1 bills only.");
             System.exit(0);
-        }
+        }           
         scanner.close();
-        }
+    }
 
-        public void performTransaction() {
-            if (totalAmount >= selectedSnack.getCost()) {
-                int change = totalAmount - selectedSnack.getCost();
-                System.out.println("Transaction completed. Enjoy your snack!");
-                System.out.println("Change: $"+ change);
-            } else {
-                System.out.println("Insufficient funds. Please insert more money");
-            }
+    public void confirmTransaction(char choice) {
+        switch (choice) {
+            case 'Y':
+                performTransaction();
+                break;
+            case 'y':
+                performTransaction();;
+                break;
+            case 'N':
+                cancelTransaction();
+                break;
+            case 'n':
+                cancelTransaction();
+                break;
+            default:
+                System.out.println("Invalid choice.");
+                System.exit(0);
+        }
+    }
+
+    public void performTransaction() {
+        if (totalAmount >= selectedSnack.getCost()) {
+            int change = totalAmount - selectedSnack.getCost();
+            System.out.println("Transaction completed. Enjoy your snack!");
+            System.out.println("Change: $" + change);
+        } else {
+            System.out.println("Insufficient funds. Please insert more money");
+        }
+    }
+
+    private void cancelTransaction() {
+        System.out.println("Transaction cancelled. Full refund: $" + totalAmount);
+        totalAmount = 0; // resets total amount
+    }
+
+    public void departureMessage() {
+        System.out.println("Thank you for using the Snack Vending Machine");
     }
 
 
@@ -78,8 +111,9 @@ public class VendingMachine {
         char snackChoice = scanner.nextLine().toLowerCase().charAt(0);
 
         vendingMachine.selectSnack(snackChoice);
-
+        //insert money, confirm / cancel transaction here
         vendingMachine.insertMoney();
+        vendingMachine.departureMessage();
 
         scanner.close();
     }
